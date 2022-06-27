@@ -101,4 +101,12 @@ class StudentRepositoryTest {
         System.out.println("students = " + students);
     }
 
+    @Test
+    public void printStudentByEmail(){
+        List<Student> students =
+        studentRepository.getStudentByEmailId("xyz@email.com");
+
+        System.out.println("students = " + students);
+    }
+
 }
