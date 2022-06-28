@@ -37,7 +37,8 @@ class StudentRepositoryTest {
 //
 //    }
 
-    @Test
+
+    @Test //Testing default method of JPA
     public void saveStudent() {
         //building student obj using parent obj
 
@@ -58,7 +59,7 @@ class StudentRepositoryTest {
 
     }
 
-    @Test
+    @Test //Testing default method of JPA
     public void printAllStudent(){
         List <Student> studentList =
                 studentRepository.findAll();
@@ -67,7 +68,7 @@ class StudentRepositoryTest {
     }
 
 
-    @Test
+    @Test //Testing default method of JPA, need to declare inside repo
     public void printAllStudentByFirstName(){
         List <Student> studentList =
                 studentRepository.findByFirstName("zayan");
@@ -75,7 +76,7 @@ class StudentRepositoryTest {
         System.out.println("Studnets list = "+studentList);
     }
 
-    @Test
+    @Test //Testing default method of JPA, need to declare inside repo
     public void printAllStudentByFirstNameContaining(){
         List <Student> studentList =
                 studentRepository.findByFirstNameContaining("ay");
@@ -83,37 +84,62 @@ class StudentRepositoryTest {
         System.out.println("Studnets list = "+studentList);
     }
     
-    @Test
+    @Test //Testing default method of JPA, need to declare inside repo
     public void printAllStudentWithLastName(){
         List <Student> students = studentRepository.findByLastNameNotNull();
         System.out.println("students = " + students);
     }
     
-    @Test
+    @Test //Testing default method of JPA, need to declare inside repo
     public void printStudentByParentName(){
         List<Student> students = studentRepository.findByParentName("Bill");
         System.out.println("students = " + students);
     }
     
-    @Test
+    @Test //Testing default method of JPA, need to declare inside repo
     public void printStudentByFirstAndLastName(){
         List<Student> students = studentRepository.findByFirstNameAndLastName("zayan","myza");
         System.out.println("students = " + students);
     }
 
-    @Test
+    @Test //Testing JPQL method
     public void printStudentByEmail(){
-        List<Student> students =
+        Student student =
         studentRepository.getStudentByEmailId("xyz@email.com");
 
-        System.out.println("students = " + students);
+        System.out.println("students = " + student);
     }
     
-    @Test
+    @Test //Testing JPQL method
     public void printStudentFirstNameByEmailId(){
         String firstName =
                 studentRepository.getStudentFirstNameByEmailId("xyz@email.com");
         System.out.println("firstName = " + firstName);
+    }
+
+    @Test //Testing native SQL method
+    public void printStudentByEmailIdNative(){
+        String student =
+                studentRepository.getStudentFirstNameByEmailNative("xyz@email.com");
+
+        System.out.println("student = " + student);
+    }
+
+
+    @Test //Testing native SQL method using named param
+    public void printStudentByEmailIdNativeParam(){
+        Student student =
+                studentRepository.getStudentByEmailNativeParam("xyz@email.com");
+
+        System.out.println("student = " + student);
+    }
+
+    @Test //Testing native SQL method for modifying and transaction using named param
+    public void updateStudentFirstNameByEmailParam(){
+        int update =
+                studentRepository.updateFirstNameByEmail("Myza", "xyz@email.com");
+
+        System.out.println("student = " + update);
     }
 
 }
