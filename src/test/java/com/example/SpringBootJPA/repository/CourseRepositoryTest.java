@@ -1,6 +1,8 @@
 package com.example.SpringBootJPA.repository;
 
 import com.example.SpringBootJPA.entity.Course;
+import com.example.SpringBootJPA.entity.Parent;
+import com.example.SpringBootJPA.entity.Student;
 import com.example.SpringBootJPA.entity.Teacher;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,5 +128,38 @@ class CourseRepositoryTest {
                         firstPage).getContent();
 
         System.out.println("courses = " + courses);
+    }
+
+    @Test
+    public void saveCourseWithStudentAndTeacher(){ // To test many to many relation between course and student
+        
+        Teacher teacher = Teacher.builder()
+                .firstName("Abdus")
+                .LastName("Shakur")
+                .build();
+
+        Parent parent = Parent.builder()
+                .name("Noor-a-Aysha")
+                .email("noor@gmail.com")
+                .mobile("019436895654")
+                .build();
+
+        Student student = Student.builder()
+                .firstName("Raiyan")
+                .lastName("Khandakar")
+                .email("Khandakar@gmail.com")
+                .parent(parent)
+                .build();
+        
+        Course course = Course.builder()
+                .title("Algo")
+                .credit(3)
+                .teacher(teacher)
+                .build();
+        
+        course.addStudents(student);
+
+        courseRepository.save(course);
+//        System.out.println("course = " + course);
     }
 }

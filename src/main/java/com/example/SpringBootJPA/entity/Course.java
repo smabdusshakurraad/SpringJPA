@@ -4,6 +4,8 @@ import com.example.SpringBootJPA.repository.CourseRepository;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -40,5 +42,29 @@ public class Course { // course class
             referencedColumnName = "teacherId"
     )
     private Teacher teacher;
+
+    //Many-to-Many Joining
+    @ManyToMany(
+            cascade = CascadeType.ALL
+    )
+    @JoinTable( // New Joining Table
+            name = "course_studnet_mapping",
+            joinColumns = @JoinColumn( // Joining column of this entity
+                    name = "course_id",
+                    referencedColumnName = "courseId"
+            ),
+            inverseJoinColumns = @JoinColumn( // Joining column of the entity we want to join
+                    name = "student_id",
+                    referencedColumnName = "studentId"
+            )
+
+    )
+    private List<Student> students; // students list for many many joining
+
+    public void addStudents(Student student){
+
+        if(students == null) students = new ArrayList<>(); // arraylist to add student value
+        students.add(student); // add student
+    }
 
 }
