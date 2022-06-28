@@ -5,10 +5,11 @@ import com.example.SpringBootJPA.entity.Teacher;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class CourseRepositoryTest {
@@ -38,5 +39,92 @@ class CourseRepositoryTest {
                         .build();
 
         courseRepository.save(course);
+    }
+
+    @Test
+    public void findAllPagination(){ // pagination without sorting
+        //springframework.data.domain
+       org.springframework.data.domain.Pageable firstPageWithThreeRecords
+                =  PageRequest.of(0,3); // First page with 3 elements per page
+
+        Pageable secondPageWithTwoRecords
+                =  PageRequest.of(1,2); // 2nd page with 2 elements per page
+
+        List<Course> courses =
+                courseRepository.findAll(firstPageWithThreeRecords)
+                        .getContent(); // get the contents based on pagination
+
+        long totalElements = courseRepository.findAll(firstPageWithThreeRecords)
+                .getTotalElements(); // get elements number per page based on pagination
+
+        long totalPages =
+                courseRepository.findAll( firstPageWithThreeRecords)
+                        .getTotalPages(); // get total page numbers based on pagination
+
+        System.out.println("totalPages = " + totalPages);
+        System.out.println("totalElements = " + totalElements);
+        System.out.println("courses = " + courses);
+
+
+        courses = courseRepository.findAll(secondPageWithTwoRecords)
+                .getContent();
+
+        totalElements = courseRepository.findAll(secondPageWithTwoRecords)
+                .getTotalElements();
+
+        totalPages = courseRepository.findAll(secondPageWithTwoRecords)
+                .getTotalPages();
+
+        System.out.println("courses = " + courses);
+        System.out.println("totalElements = " + totalElements);
+        System.out.println("totalPages = " + totalPages);
+
+
+    }
+
+    @Test
+    public void findBySorting(){ // Pagination with sorting
+        Pageable firstPagrwithTwoRecords =
+                PageRequest.of(
+                        0,
+                        2,
+                        Sort.by("title")
+                );
+
+        Pageable secondPagewithTwoRecords =
+                PageRequest.of(
+                        1,
+                        2,
+                        Sort.by("credit").descending()
+                );
+        
+        List<Course> courses =
+                courseRepository.findAll(firstPagrwithTwoRecords)
+                        .getContent();
+
+        System.out.println("courses = " + courses);
+
+        courses = courseRepository.findAll(secondPagewithTwoRecords)
+                .getContent();
+
+        System.out.println("courses = " + courses);
+        
+    }
+
+
+    @Test
+    public void findByTitleContaining(){ //To test Custom Pagination method
+
+        Pageable firstPage =
+                PageRequest.of(
+                        0,
+                        9
+                );
+
+        List<Course> courses =
+                courseRepository.findByTitleContaining("D",
+                        firstPage).getContent();
+
+        System.out.println("courses = " + courses);
     }
 }
